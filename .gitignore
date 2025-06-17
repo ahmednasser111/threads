@@ -44,3 +44,5 @@ materials.txt
 
 # clerk configuration (can include secrets)
 /.clerk/
+
+*.zip
