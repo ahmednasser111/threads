@@ -1,43 +1,145 @@
 @import "tailwindcss";
 
+:root {
+  /* Font Sizes */
+  --heading1-bold: 36px;
+  --heading1-semibold: 36px;
+  --heading2-bold: 30px;
+  --heading2-semibold: 30px;
+  --heading3-bold: 24px;
+  --heading4-medium: 20px;
+  --body-bold: 18px;
+  --body-semibold: 18px;
+  --body-medium: 18px;
+  --body-normal: 18px;
+  --body1-bold: 18px;
+  --base-regular: 16px;
+  --base-medium: 16px;
+  --base-semibold: 16px;
+  --base1-semibold: 16px;
+  --small-regular: 14px;
+  --small-medium: 14px;
+  --small-semibold: 14px;
+  --subtle-medium: 12px;
+  --subtle-semibold: 12px;
+  --tiny-medium: 10px;
+  --x-small-semibold: 7px;
+  
+  /* Colors */
+  --primary-500: #877EFF;
+  --secondary-500: #FFB620;
+  --blue: #0095F6;
+  --logout-btn: #FF5A5A;
+  --navbar-menu: rgba(16, 16, 18, 0.6);
+  --dark-1: #000000;
+  --dark-2: #121417;
+  --dark-3: #101012;
+  --dark-4: #1F1F22;
+  --light-1: #FFFFFF;
+  --light-2: #EFEFEF;
+  --light-3: #7878A3;
+  --light-4: #5C5C7B;
+  --gray-1: #697C89;
+  --glassmorphism: rgba(16, 16, 18, 0.6);
+}
+
+@theme inline {
+  /* Colors */
+  --color-primary-500: var(--primary-500);
+  --color-secondary-500: var(--secondary-500);
+  --color-blue: var(--blue);
+  --color-logout-btn: var(--logout-btn);
+  --color-navbar-menu: var(--navbar-menu);
+  --color-dark-1: var(--dark-1);
+  --color-dark-2: var(--dark-2);
+  --color-dark-3: var(--dark-3);
+  --color-dark-4: var(--dark-4);
+  --color-light-1: var(--light-1);
+  --color-light-2: var(--light-2);
+  --color-light-3: var(--light-3);
+  --color-light-4: var(--light-4);
+  --color-gray-1: var(--gray-1);
+  --color-glassmorphism: var(--glassmorphism);
+
+  /* Font sizes */
+  --font-size-heading1-bold: var(--heading1-bold);
+  --font-size-heading1-semibold: var(--heading1-semibold);
+  --font-size-heading2-bold: var(--heading2-bold);
+  --font-size-heading2-semibold: var(--heading2-semibold);
+  --font-size-heading3-bold: var(--heading3-bold);
+  --font-size-heading4-medium: var(--heading4-medium);
+  --font-size-body-bold: var(--body-bold);
+  --font-size-body-semibold: var(--body-semibold);
+  --font-size-body-medium: var(--body-medium);
+  --font-size-body-normal: var(--body-normal);
+  --font-size-body1-bold: var(--body1-bold);
+  --font-size-base-regular: var(--base-regular);
+  --font-size-base-medium: var(--base-medium);
+  --font-size-base-semibold: var(--base-semibold);
+  --font-size-base1-semibold: var(--base1-semibold);
+  --font-size-small-regular: var(--small-regular);
+  --font-size-small-medium: var(--small-medium);
+  --font-size-small-semibold: var(--small-semibold);
+  --font-size-subtle-medium: var(--subtle-medium);
+  --font-size-subtle-semibold: var(--subtle-semibold);
+  --font-size-tiny-medium: var(--tiny-medium);
+  --font-size-x-small-semibold: var(--x-small-semibold);
+
+  --breakpoint-xs: 30rem;
+  --breakpoint-2xl: 100rem;
+  --breakpoint-3xl: 120rem;
+}
+
+
 @layer components {
   /* main */
   .main-container {
-    @apply flex min-h-screen flex-1 flex-col items-center bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    @apply flex min-h-screen flex-1 flex-col items-center px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+    background-color: var(--color-dark-1);
   }
 
   /* Head Text */
   .head-text {
-    @apply text-heading2-bold text-light-1;
+    color: var(--color-light-1);
+    font-size: var(--font-size-heading2-bold);
   }
 
   /* Activity */
   .activity-card {
-    @apply flex items-center gap-2 rounded-md bg-dark-2 px-7 py-4;
+    @apply flex items-center gap-2 rounded-md px-7 py-4;
+    background-color: var(--color-dark-2);
   }
 
   /* No Result */
   .no-result {
-    @apply text-center !text-base-regular text-light-3;
+    text-align: center;
+    font-size: var(--font-size-base-regular);
+    color: var(--color-light-3) !important;
   }
 
   /* Community Card */
   .community-card {
-    @apply w-full rounded-lg bg-dark-3 px-4 py-5 sm:w-96;
+    @apply w-full rounded-lg px-4 py-5 sm:w-96;
+    background-color: var(--color-dark-3);
   }
 
   .community-card_btn {
-    @apply rounded-lg bg-primary-500 px-5 py-1.5 text-small-regular !text-light-1 !important;
+    @apply !rounded-lg !px-5 !py-1.5;
+    background-color: var(--color-primary-500);
+    font-size: var(--font-size-small-regular);
+    color: var(--color-light-1) !important;
   }
 
   /* thread card  */
   .thread-card_bar {
-    @apply relative mt-2 w-0.5 grow rounded-full bg-neutral-800;
+    @apply relative mt-2 w-0.5 grow rounded-full;
+    background-color: #262626; /* fallback */
+    background-color: var(--color-gray-1);
   }
 
   /* User card */
   .user-card {
-    @apply flex flex-col justify-between gap-4 max-xs:rounded-xl max-xs:bg-dark-3 max-xs:p-4 xs:flex-row xs:items-center;
+    @apply flex flex-col justify-between gap-4 max-xs:rounded-xl max-xs:p-4 xs:flex-row xs:items-center;
   }
 
   .user-card_avatar {
@@ -45,23 +147,31 @@
   }
 
   .user-card_btn {
-    @apply h-auto min-w-[74px] rounded-lg bg-primary-500 text-[12px] text-light-1 !important;
+    @apply !h-auto !min-w-[74px] !rounded-lg text-[12px];
+    background-color: var(--color-primary-500);
+    color: var(--color-light-1) !important;
   }
 
   .searchbar {
-    @apply flex gap-1 rounded-lg bg-dark-3 px-4 py-2;
+    @apply flex gap-1 rounded-lg px-4 py-2;
+    background-color: var(--color-dark-3);
   }
 
   .searchbar_input {
-    @apply border-none bg-dark-3 text-base-regular text-light-4 outline-none !important;
+    @apply !border-none !outline-none;
+    background-color: var(--color-dark-3);
+    color: var(--color-light-4);
+    font-size: var(--font-size-base-regular);
   }
 
   .topbar {
-    @apply fixed top-0 z-30 flex w-full items-center justify-between bg-dark-2 px-6 py-3;
+    @apply fixed top-0 z-30 flex w-full items-center justify-between px-6 py-3;
+    background-color: var(--color-dark-2);
   }
 
   .bottombar {
-    @apply fixed bottom-0 z-10 w-full rounded-t-3xl bg-glassmorphism p-4 backdrop-blur-lg xs:px-7 md:hidden;
+    @apply fixed bottom-0 z-10 w-full rounded-t-3xl p-4 backdrop-blur-lg xs:px-7 md:hidden;
+    background-color: var(--color-glassmorphism);
   }
 
   .bottombar_container {
@@ -73,7 +183,9 @@
   }
 
   .leftsidebar {
-    @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r border-r-dark-4 bg-dark-2 pb-5 pt-28 max-md:hidden;
+    @apply sticky left-0 top-0 z-20 flex h-screen w-fit flex-col justify-between overflow-auto border-r pb-5 pt-28 max-md:hidden;
+    background-color: var(--color-dark-2);
+    border-right-color: var(--color-dark-4);
   }
 
   .leftsidebar_link {
@@ -85,13 +197,15 @@
   }
 
   .rightsidebar {
-    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l border-l-dark-4 bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
+    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col justify-between gap-12 overflow-auto border-l px-10 pb-6 pt-28 max-xl:hidden;
+    background-color: var(--color-dark-2);
+    border-left-color: var(--color-dark-4);
   }
 }
 
 @layer utilities {
   .css-invert {
-    @apply invert-[50%] brightness-200;
+    filter: invert(50%) brightness(2);
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -101,16 +215,16 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #09090a;
+    background: var(--color-dark-3);
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #5c5c7b;
+    background: var(--color-light-4);
     border-radius: 50px;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #7878a3;
+    background: var(--color-light-3);
   }
 }
 
@@ -129,31 +243,46 @@
 
 /* Tab */
 .tab {
-  @apply flex min-h-[50px] flex-1 items-center gap-3 bg-dark-2 text-light-2 data-[state=active]:bg-[#0e0e12] data-[state=active]:text-light-2 !important;
+  @apply !flex !min-h-[50px] !flex-1 !items-center !gap-3;
+  background-color: var(--color-dark-2);
+  color: var(--color-light-2);
+}
+.tab[data-state="active"] {
+  background-color: #0e0e12;
+  color: var(--color-light-2);
 }
 
 .no-focus {
-  @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
+  @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0;
 }
 
 /* Account Profile  */
 .account-form_image-label {
-  @apply flex h-24 w-24 items-center justify-center rounded-full bg-dark-4 !important;
+  @apply !flex !h-24 !w-24 !items-center !justify-center !rounded-full;
+  background-color: var(--color-dark-4);
 }
 
 .account-form_image-input {
-  @apply cursor-pointer border-none bg-transparent outline-none file:text-blue !important;
+  @apply !cursor-pointer !border-none !bg-transparent !outline-none file:text-blue;
 }
 
 .account-form_input {
-  @apply border border-dark-4 bg-dark-3 text-light-1 !important;
+  @apply !border;
+  border-color: var(--color-dark-4);
+  background-color: var(--color-dark-3);
+  color: var(--color-light-1);
 }
 
 /* Comment Form */
 .comment-form {
-  @apply mt-10 flex items-center gap-4 border-y border-y-dark-4 py-5 max-xs:flex-col !important;
+  @apply !mt-10 !flex !items-center !gap-4 !border-y !py-5 max-xs:flex-col;
+  border-top-color: var(--color-dark-4);
+  border-bottom-color: var(--color-dark-4);
 }
 
 .comment-form_btn {
-  @apply rounded-3xl bg-primary-500 px-8 py-2 !text-small-regular text-light-1 max-xs:w-full !important;
+  @apply !rounded-3xl !px-8 !py-2 max-xs:w-full;
+  background-color: var(--color-primary-500);
+  font-size: var(--font-size-small-regular);
+  color: var(--color-light-1) !important;
 }

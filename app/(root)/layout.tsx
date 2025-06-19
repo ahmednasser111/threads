@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import "../globals.css";
 
 export const metadata: Metadata = {
 	title: "Threads App",
@@ -31,12 +32,12 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<ClerkProvider
-			appearance={{
-				baseTheme: dark,
-			}}>
-			<html lang='en'>
-				<body className={`${inter.className} `}>
+		<html lang='en'>
+			<body className={`${inter.className}`}>
+				<ClerkProvider
+					appearance={{
+						baseTheme: dark,
+					}}>
 					<Topbar />
 
 					<main className='flex flex-row'>
@@ -48,8 +49,8 @@ export default function RootLayout({
 					</main>
 
 					<Bottombar />
-				</body>
-			</html>
-		</ClerkProvider>
+				</ClerkProvider>
+			</body>
+		</html>
 	);
 }
