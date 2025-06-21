@@ -8,7 +8,8 @@ async function Page() {
   const user = await currentUser();
   if (!user) return null; // to avoid typescript warnings
 
-  const userInfo = {}
+  const userInfo = null; // TODO:Replace with actual user fetching logic, e.g., fetching from a database
+
   // await fetchUser(user.id);
   if (userInfo?.onboarded) redirect("/");
 
@@ -20,6 +21,7 @@ async function Page() {
     bio: userInfo ? userInfo?.bio : "",
     image: userInfo ? userInfo?.image : user.imageUrl,
   };
+
 
   return (
     <main className='mx-auto flex max-w-3xl flex-col justify-start px-10 py-20'>
