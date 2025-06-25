@@ -23,7 +23,7 @@ import { UserValidation } from "@/lib/vaildations/user";
 import { useUploadThing } from "@/lib/uploadthing";
 import { isBase64Image } from "@/lib/utils";
 
-// import { updateUser } from "@/lib/actions/user.actions";
+import { updateUser } from "@/lib/actions/user.actions";
 
 interface Props {
 	user: {
@@ -66,14 +66,14 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 			}
 		}
 
-		// await updateUser({
-		//   name: values.name,
-		//   path: pathname,
-		//   username: values.username,
-		//   userId: user.id,
-		//   bio: values.bio,
-		//   image: values.profile_photo,
-		// });
+		await updateUser({
+			userId: user.id,
+			name: values.name,
+			path: pathname,
+			username: values.username,
+			bio: values.bio,
+			image: values.profile_photo,
+		});
 
 		if (pathname === "/profile/edit") {
 			router.back();
@@ -208,7 +208,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 					)}
 				/>
 
-				<Button type="submit" className="bg-primary-500">
+				<Button type="submit" className="bg-primary-500 cursor-pointer">
 					{btnTitle}
 				</Button>
 			</form>
