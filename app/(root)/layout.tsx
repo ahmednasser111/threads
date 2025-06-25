@@ -32,7 +32,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang='en'>
+		<html lang="en">
 			<body className={`${inter.className}`}>
 				<ClerkProvider
 					appearance={{
@@ -40,10 +40,10 @@ export default function RootLayout({
 					}}>
 					<Topbar />
 
-					<main className='flex flex-row'>
+					<main className="flex flex-row">
 						<LeftSidebar />
-						<section className='main-container'>
-							<div className='w-full max-w-4xl'>{children}</div>
+						<section className="main-container">
+							<div className="w-full max-w-4xl">{children}</div>
 						</section>
 						{/* <RightSidebar /> */}
 					</main>

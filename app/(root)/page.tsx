@@ -2,16 +2,17 @@ import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import ThreadCard from "@/components/cards/ThreadCard";
+import PaginationWrapper from "@/components/shared/PaginationWrapper";
 
 import { fetchPosts } from "@/lib/actions/thread.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
-import Pagination from "@/components/shared/Pagination";
 
 async function Home({
-	searchParams,
+	searchParams: searchParamsPromise,
 }: {
-	searchParams: { [key: string]: string | undefined };
+	searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
+	const searchParams = await searchParamsPromise;
 	const user = await currentUser();
 	if (!user) return null;
 
@@ -32,7 +33,7 @@ async function Home({
 					<p className="no-result">No threads found</p>
 				) : (
 					<>
-						{result.posts.map((post) => (
+						{result.posts.map((post: any) => (
 							<ThreadCard
 								key={post._id}
 								id={post._id}
@@ -49,7 +50,7 @@ async function Home({
 				)}
 			</section>
 
-			<Pagination
+			<PaginationWrapper
 				path="/"
 				pageNumber={searchParams?.page ? +searchParams.page : 1}
 				isNext={result.isNext}
