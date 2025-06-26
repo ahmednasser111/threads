@@ -7,6 +7,7 @@ import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { ProfileHeader } from "@/components/shared/ProfileHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import ThreadsTab from "@/components/shared/ThreadsTab";
 
 async function Page({
 	params: paramsPromise,
@@ -35,7 +36,7 @@ async function Page({
 
 			<div className="mt-9">
 				<Tabs defaultValue="threads" className="w-full">
-					<TabsList className="tab">
+					<TabsList className="tab w-full">
 						{profileTabs.map((tab) => (
 							<TabsTrigger key={tab.label} value={tab.value} className="tab">
 								<Image

@@ -32,12 +32,12 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
-			<body className={`${inter.className}`}>
-				<ClerkProvider
-					appearance={{
-						baseTheme: dark,
-					}}>
+		<ClerkProvider
+			appearance={{
+				baseTheme: dark,
+			}}>
+			<html lang="en">
+				<body className={`${inter.className}`}>
 					<Topbar />
 
 					<main className="flex flex-row">
@@ -49,8 +49,8 @@ export default function RootLayout({
 					</main>
 
 					<Bottombar />
-				</ClerkProvider>
-			</body>
-		</html>
+				</body>
+			</html>
+		</ClerkProvider>
 	);
 }
