@@ -1,6 +1,6 @@
 import Bottombar from "@/components/shared/Bottombar";
 import LeftSidebar from "@/components/shared/LeftSidebar";
-// import RightSidebar from "@/components/shared/RightSidebar";
+import RightSidebar from "@/components/shared/RightSidebar";
 import Topbar from "@/components/shared/Topbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -45,7 +45,7 @@ export default function RootLayout({
 						<section className="main-container">
 							<div className="w-full max-w-4xl">{children}</div>
 						</section>
-						{/* <RightSidebar /> */}
+						<RightSidebar />
 					</main>
 
 					<Bottombar />

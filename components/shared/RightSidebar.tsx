@@ -3,6 +3,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import UserCard from "../cards/UserCard";
 
 import { fetchCommunities } from "@/lib/actions/community.actions";
+import { fetchUsers } from "@/lib/actions/user.actions";
 
 async function RightSidebar() {
 	const user = await currentUser();
@@ -70,6 +71,3 @@ async function RightSidebar() {
 }
 
 export default RightSidebar;
-function fetchUsers(arg0: { userId: string; pageSize: number }) {
-	throw new Error("Function not implemented.");
-}
