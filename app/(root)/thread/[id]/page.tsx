@@ -10,16 +10,6 @@ import { fetchThreadById } from "@/lib/actions/thread.actions";
 
 export const revalidate = 0;
 
-interface Thread {
-	_id: string;
-	parentId: string | null;
-	text: string;
-	author: any; // Replace with a more specific type if available
-	community: any; // Replace with a more specific type if available
-	createdAt: string;
-	children: Thread[];
-}
-
 async function page({
 	params: paramsPromise,
 }: {
@@ -34,7 +24,7 @@ async function page({
 	const userInfo = await fetchUser(user.id);
 	if (!userInfo?.onboarded) redirect("/onboarding");
 
-	const thread: Thread = await fetchThreadById(params.id);
+	const thread: any = await fetchThreadById(params.id);
 
 	return (
 		<section className="relative">
@@ -60,7 +50,7 @@ async function page({
 			</div>
 
 			<div className="mt-10">
-				{thread.children.map((childItem: Thread) => (
+				{thread.children.map((childItem: any) => (
 					<ThreadCard
 						key={childItem._id}
 						id={childItem._id}
