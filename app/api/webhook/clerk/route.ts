@@ -55,8 +55,11 @@ export const POST = async (request: Request) => {
 			JSON.stringify(payload),
 			heads as IncomingHttpHeaders & WebhookRequiredHeaders
 		) as Event;
-	} catch (err) {
-		return NextResponse.json({ message: err }, { status: 400 });
+	} catch (err: unknown) {
+		return NextResponse.json(
+			{ message: err instanceof Error ? err.message : String(err) },
+			{ status: 400 }
+		);
 	}
 
 	const eventType: EventType = evnt?.type!;
@@ -70,7 +73,7 @@ export const POST = async (request: Request) => {
 
 		try {
 			await createCommunity(
-				// @ts-expect-error
+				// @ts-expect-error Clerk webhook payload types are not fully compatible with our backend types
 				id,
 				name,
 				slug,
@@ -80,7 +83,7 @@ export const POST = async (request: Request) => {
 			);
 
 			return NextResponse.json({ message: "User created" }, { status: 201 });
-		} catch (err) {
+		} catch (err: unknown) {
 			console.log(err);
 			return NextResponse.json(
 				{ message: "Internal Server Error" },
@@ -101,9 +104,8 @@ export const POST = async (request: Request) => {
 				{ message: "Invitation created" },
 				{ status: 201 }
 			);
-		} catch (err) {
+		} catch (err: unknown) {
 			console.log(err);
-
 			return NextResponse.json(
 				{ message: "Internal Server Error" },
 				{ status: 500 }
@@ -119,16 +121,15 @@ export const POST = async (request: Request) => {
 			const { organization, public_user_data } = evnt?.data;
 			console.log("created", evnt?.data);
 
-			// @ts-expect-error
+			// @ts-expect-error Clerk webhook payload types are not fully compatible with our backend types
 			await addMemberToCommunity(organization.id, public_user_data.user_id);
 
 			return NextResponse.json(
 				{ message: "Invitation accepted" },
 				{ status: 201 }
 			);
-		} catch (err) {
+		} catch (err: unknown) {
 			console.log(err);
-
 			return NextResponse.json(
 				{ message: "Internal Server Error" },
 				{ status: 500 }
@@ -144,13 +145,12 @@ export const POST = async (request: Request) => {
 			const { organization, public_user_data } = evnt?.data;
 			console.log("removed", evnt?.data);
 
-			// @ts-expect-error
+			// @ts-expect-error Clerk webhook payload types are not fully compatible with our backend types
 			await removeUserFromCommunity(public_user_data.user_id, organization.id);
 
 			return NextResponse.json({ message: "Member removed" }, { status: 201 });
-		} catch (err) {
+		} catch (err: unknown) {
 			console.log(err);
-
 			return NextResponse.json(
 				{ message: "Internal Server Error" },
 				{ status: 500 }
@@ -166,13 +166,12 @@ export const POST = async (request: Request) => {
 			const { id, logo_url, name, slug } = evnt?.data;
 			console.log("updated", evnt?.data);
 
-			// @ts-expect-error
+			// @ts-expect-error Clerk webhook payload types are not fully compatible with our backend types
 			await updateCommunityInfo(id, name, slug, logo_url);
 
 			return NextResponse.json({ message: "Member removed" }, { status: 201 });
-		} catch (err) {
+		} catch (err: unknown) {
 			console.log(err);
-
 			return NextResponse.json(
 				{ message: "Internal Server Error" },
 				{ status: 500 }
@@ -188,16 +187,15 @@ export const POST = async (request: Request) => {
 			const { id } = evnt?.data;
 			console.log("deleted", evnt?.data);
 
-			// @ts-expect-error
+			// @ts-expect-error Clerk webhook payload types are not fully compatible with our backend types
 			await deleteCommunity(id);
 
 			return NextResponse.json(
 				{ message: "Organization deleted" },
 				{ status: 201 }
 			);
-		} catch (err) {
+		} catch (err: unknown) {
 			console.log(err);
-
 			return NextResponse.json(
 				{ message: "Internal Server Error" },
 				{ status: 500 }
