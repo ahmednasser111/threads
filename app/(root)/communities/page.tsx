@@ -1,4 +1,4 @@
-const Page = async () => {
+export const Page = async () => {
 	return (
 		<>
 			<h1 className="head-text">Communities</h1>

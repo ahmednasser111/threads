@@ -61,7 +61,6 @@ async function Page({
 							key={`content-${tab.label}`}
 							value={tab.value}
 							className="w-full text-light-1">
-							{/* @ts-ignore */}
 							<ThreadsTab
 								currentUserId={user.id}
 								accountId={userInfo.id}

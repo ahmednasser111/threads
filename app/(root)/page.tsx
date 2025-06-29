@@ -7,6 +7,16 @@ import PaginationWrapper from "@/components/shared/PaginationWrapper";
 import { fetchPosts } from "@/lib/actions/thread.actions";
 import { fetchUser } from "@/lib/actions/user.actions";
 
+interface Post {
+	_id: string;
+	parentId: string | null;
+	text: string;
+	author: any;
+	community: any;
+	createdAt: string;
+	children: any[];
+}
+
 async function Home({
 	searchParams: searchParamsPromise,
 }: {
@@ -33,7 +43,7 @@ async function Home({
 					<p className="no-result">No threads found</p>
 				) : (
 					<>
-						{result.posts.map((post: any) => (
+						{result.posts.map((post: Post) => (
 							<ThreadCard
 								key={post._id}
 								id={post._id}
