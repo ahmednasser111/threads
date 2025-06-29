@@ -10,6 +10,22 @@ import { fetchThreadById } from "@/lib/actions/thread.actions";
 
 export const revalidate = 0;
 
+interface Author {
+	name: string;
+	image: string;
+	id: string;
+}
+
+interface Thread {
+	_id: string;
+	parentId: string | null;
+	text: string;
+	author: Author;
+	community: { id: string; name: string; image: string } | null;
+	createdAt: string;
+	children: Thread[];
+}
+
 async function page({
 	params: paramsPromise,
 }: {
@@ -24,7 +40,7 @@ async function page({
 	const userInfo = await fetchUser(user.id);
 	if (!userInfo?.onboarded) redirect("/onboarding");
 
-	const thread: any = await fetchThreadById(params.id);
+	const thread: Thread = await fetchThreadById(params.id);
 
 	return (
 		<section className="relative">
@@ -35,7 +51,13 @@ async function page({
 					parentId={thread.parentId}
 					content={thread.text}
 					author={thread.author}
-					community={thread.community}
+					community={
+						thread.community as {
+							id: string;
+							name: string;
+							image: string;
+						} | null
+					}
 					createdAt={thread.createdAt}
 					comments={thread.children}
 				/>
@@ -50,7 +72,7 @@ async function page({
 			</div>
 
 			<div className="mt-10">
-				{thread.children.map((childItem: any) => (
+				{thread.children.map((childItem: Thread) => (
 					<ThreadCard
 						key={childItem._id}
 						id={childItem._id}
@@ -58,7 +80,13 @@ async function page({
 						parentId={childItem.parentId}
 						content={childItem.text}
 						author={childItem.author}
-						community={childItem.community}
+						community={
+							childItem.community as {
+								id: string;
+								name: string;
+								image: string;
+							} | null
+						}
 						createdAt={childItem.createdAt}
 						comments={childItem.children}
 						isComment
