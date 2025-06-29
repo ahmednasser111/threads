@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 // Resource: https://clerk.com/docs/users/sync-data-to-your-backend
 // Above article shows why we need webhooks i.e., to sync data to our backend
 
@@ -62,7 +61,14 @@ export const POST = async (request: Request) => {
 		);
 	}
 
-	const eventType: EventType = evnt?.type!;
+	// Safe eventType extraction
+	if (!evnt?.type) {
+		return NextResponse.json(
+			{ message: "Invalid event type" },
+			{ status: 400 }
+		);
+	}
+	const eventType: EventType = evnt.type;
 
 	// Listen organization creation event
 	if (eventType === "organization.created") {
