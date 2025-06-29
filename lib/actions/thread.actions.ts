@@ -88,15 +88,24 @@ export async function createThread({
 		}
 
 		revalidatePath(path);
-	} catch (error: any) {
-		throw new Error(`Failed to create thread: ${error.message}`);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			throw new Error(`Failed to create thread: ${error.message}`);
+		}
+		throw new Error("Failed to create thread: Unknown error");
 	}
 }
 
-async function fetchAllChildThreads(threadId: string): Promise<any[]> {
+interface ThreadType {
+	_id: string;
+	author?: { _id?: string };
+	community?: { _id?: string };
+}
+
+async function fetchAllChildThreads(threadId: string): Promise<ThreadType[]> {
 	const childThreads = await Thread.find({ parentId: threadId });
 
-	const descendantThreads = [];
+	const descendantThreads: ThreadType[] = [];
 	for (const childThread of childThreads) {
 		const descendants = await fetchAllChildThreads(childThread._id);
 		descendantThreads.push(childThread, ...descendants);
@@ -156,8 +165,11 @@ export async function deleteThread(id: string, path: string): Promise<void> {
 		);
 
 		revalidatePath(path);
-	} catch (error: any) {
-		throw new Error(`Failed to delete thread: ${error.message}`);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			throw new Error(`Failed to delete thread: ${error.message}`);
+		}
+		throw new Error("Failed to delete thread: Unknown error");
 	}
 }
 
