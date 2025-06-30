@@ -35,16 +35,21 @@ type Event = {
 
 export const POST = async (request: Request) => {
 	const payload = await request.json();
-	const header = headers();
+	const header = await headers();
+
+	console.log("[Webhook] Incoming payload:", JSON.stringify(payload));
+	console.log("[Webhook] Incoming headers:", {
+		"svix-id": header.get("svix-id"),
+		"svix-timestamp": header.get("svix-timestamp"),
+		"svix-signature": header.get("svix-signature"),
+	});
 
 	const heads = {
-		"svix-id": (await header).get("svix-id"),
-		"svix-timestamp": (await header).get("svix-timestamp"),
-		"svix-signature": (await header).get("svix-signature"),
+		"svix-id": header.get("svix-id"),
+		"svix-timestamp": header.get("svix-timestamp"),
+		"svix-signature": header.get("svix-signature"),
 	};
 
-	// Activitate Webhook in the Clerk Dashboard.
-	// After adding the endpoint, you'll see the secret on the right side.
 	const wh = new Webhook(process.env.NEXT_CLERK_WEBHOOK_SECRET || "");
 
 	let evnt: Event | null = null;
@@ -54,21 +59,25 @@ export const POST = async (request: Request) => {
 			JSON.stringify(payload),
 			heads as IncomingHttpHeaders & WebhookRequiredHeaders
 		) as Event;
+		console.log("[Webhook] Svix verification result:", evnt);
 	} catch (err: unknown) {
+		console.error("[Webhook] Svix verification failed:", err);
 		return NextResponse.json(
 			{ message: err instanceof Error ? err.message : String(err) },
 			{ status: 400 }
 		);
 	}
 
-	// Safe eventType extraction
 	if (!evnt?.type) {
+		console.error("[Webhook] Invalid event type:", evnt);
 		return NextResponse.json(
 			{ message: "Invalid event type" },
 			{ status: 400 }
 		);
 	}
 	const eventType: EventType = evnt.type;
+	console.log("[Webhook] Event type:", eventType);
+	console.log("[Webhook] Event data:", evnt.data);
 
 	// Listen organization creation event
 	if (eventType === "organization.created") {
@@ -208,8 +217,4 @@ export const POST = async (request: Request) => {
 			);
 		}
 	}
-};
-
-export const GET = async () => {
-	return NextResponse.json({ message: "Method Not Allowed" }, { status: 405 });
 };
