@@ -88,11 +88,8 @@ export async function createThread({
 		}
 
 		revalidatePath(path);
-	} catch (error: unknown) {
-		if (error instanceof Error) {
-			throw new Error(`Failed to create thread: ${error.message}`);
-		}
-		throw new Error("Failed to create thread: Unknown error");
+	} catch (error: any) {
+		throw new Error(`Failed to create thread: ${error.message}`);
 	}
 }
 

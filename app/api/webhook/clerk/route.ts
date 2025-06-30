@@ -35,12 +35,12 @@ type Event = {
 
 export const POST = async (request: Request) => {
 	const payload = await request.json();
-	const header = await headers();
+	const header = headers();
 
 	const heads = {
-		"svix-id": header.get("svix-id"),
-		"svix-timestamp": header.get("svix-timestamp"),
-		"svix-signature": header.get("svix-signature"),
+		"svix-id": (await header).get("svix-id"),
+		"svix-timestamp": (await header).get("svix-timestamp"),
+		"svix-signature": (await header).get("svix-signature"),
 	};
 
 	// Activitate Webhook in the Clerk Dashboard.
@@ -208,4 +208,8 @@ export const POST = async (request: Request) => {
 			);
 		}
 	}
+};
+
+export const GET = async () => {
+	return NextResponse.json({ message: "Method Not Allowed" }, { status: 405 });
 };
