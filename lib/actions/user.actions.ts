@@ -17,8 +17,11 @@ export async function fetchUser(userId: string) {
 			path: "communities",
 			model: Community,
 		});
-	} catch (error: any) {
-		throw new Error(`Failed to fetch user: ${error.message}`);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			throw new Error(`Failed to fetch user: ${error.message}`);
+		}
+		throw new Error("Failed to fetch user: Unknown error");
 	}
 }
 
@@ -57,8 +60,11 @@ export async function updateUser({
 		if (path === "/profile/edit") {
 			revalidatePath(path);
 		}
-	} catch (error: any) {
-		throw new Error(`Failed to create/update user: ${error.message}`);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			throw new Error(`Failed to create/update user: ${error.message}`);
+		}
+		throw new Error("Failed to create/update user: Unknown error");
 	}
 }
 
@@ -88,9 +94,13 @@ export async function fetchUserPosts(userId: string) {
 			],
 		});
 		return threads;
-	} catch (error) {
-		console.error("Error fetching user threads:", error);
-		throw error;
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			console.error("Error fetching user threads:", error);
+			throw error;
+		}
+		console.error("Error fetching user threads: Unknown error");
+		throw new Error("Error fetching user threads: Unknown error");
 	}
 }
 
