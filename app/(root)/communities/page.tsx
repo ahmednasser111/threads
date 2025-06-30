@@ -23,6 +23,14 @@ async function Page({ params }: { params: { id: string } }) {
 
 	const communityDetails = await fetchCommunityDetails(params.id);
 
+	if (!communityDetails || !communityDetails.createdBy) {
+		return (
+			<section>
+				<p>Community not found.</p>
+			</section>
+		);
+	}
+
 	return (
 		<section>
 			<ProfileHeader
@@ -68,16 +76,20 @@ async function Page({ params }: { params: { id: string } }) {
 
 					<TabsContent value="members" className="mt-9 w-full text-light-1">
 						<section className="mt-9 flex flex-col gap-10">
-							{communityDetails.members.map((member: Member) => (
-								<UserCard
-									key={member.id}
-									id={member.id}
-									name={member.name}
-									username={member.username}
-									imgUrl={member.image}
-									personType="User"
-								/>
-							))}
+							{communityDetails.members.length === 0 ? (
+								<p>No members found.</p>
+							) : (
+								communityDetails.members.map((member: Member) => (
+									<UserCard
+										key={member.id}
+										id={member.id}
+										name={member.name}
+										username={member.username}
+										imgUrl={member.image}
+										personType="User"
+									/>
+								))
+							)}
 						</section>
 					</TabsContent>
 
