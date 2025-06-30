@@ -10,6 +10,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchCommunityDetails } from "@/lib/actions/community.actions";
 import { ProfileHeader } from "@/components/shared/ProfileHeader";
 
+interface Member {
+	id: string;
+	name: string;
+	username: string;
+	image: string;
+}
+
 async function Page({ params }: { params: { id: string } }) {
 	const user = await currentUser();
 	if (!user) return null;
@@ -52,7 +59,6 @@ async function Page({ params }: { params: { id: string } }) {
 					</TabsList>
 
 					<TabsContent value="threads" className="w-full text-light-1">
-						{/* @ts-ignore */}
 						<ThreadsTab
 							currentUserId={user.id}
 							accountId={communityDetails._id}
@@ -62,7 +68,7 @@ async function Page({ params }: { params: { id: string } }) {
 
 					<TabsContent value="members" className="mt-9 w-full text-light-1">
 						<section className="mt-9 flex flex-col gap-10">
-							{communityDetails.members.map((member: any) => (
+							{communityDetails.members.map((member: Member) => (
 								<UserCard
 									key={member.id}
 									id={member.id}
@@ -76,7 +82,6 @@ async function Page({ params }: { params: { id: string } }) {
 					</TabsContent>
 
 					<TabsContent value="requests" className="w-full text-light-1">
-						{/* @ts-ignore */}
 						<ThreadsTab
 							currentUserId={user.id}
 							accountId={communityDetails._id}
