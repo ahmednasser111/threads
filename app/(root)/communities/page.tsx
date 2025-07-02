@@ -1,108 +1,65 @@
-import Image from "next/image";
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-import { communityTabs } from "@/constants";
+import Searchbar from "@/components/shared/Searchbar";
+import Pagination from "@/components/shared/Pagination";
+import CommunityCard from "@/components/cards/CommunityCard";
 
-import UserCard from "@/components/cards/UserCard";
-import ThreadsTab from "@/components/shared/ThreadsTab";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchCommunities } from "@/lib/actions/community.actions";
 
-import { fetchCommunityDetails } from "@/lib/actions/community.actions";
-import { ProfileHeader } from "@/components/shared/ProfileHeader";
-
-interface Member {
-	id: string;
-	name: string;
-	username: string;
-	image: string;
+interface PageProps {
+	searchParams: { [key: string]: string | undefined };
 }
 
-async function Page({ params }: { params: { id: string } }) {
+async function Page({ searchParams }: PageProps) {
+	const { page, q } = await searchParams;
 	const user = await currentUser();
 	if (!user) return null;
 
-	const communityDetails = await fetchCommunityDetails(params.id);
+	const userInfo = await fetchUser(user.id);
+	if (!userInfo?.onboarded) redirect("/onboarding");
 
-	if (!communityDetails || !communityDetails.createdBy) {
-		return (
-			<section>
-				<p>Community not found.</p>
-			</section>
-		);
-	}
+	const result = await fetchCommunities({
+		searchString: q,
+		pageNumber: page ? +page : 1,
+		pageSize: 25,
+	});
 
 	return (
-		<section>
-			<ProfileHeader
-				accountId={communityDetails.createdBy.id}
-				authUserId={user.id}
-				name={communityDetails.name}
-				username={communityDetails.username}
-				imgUrl={communityDetails.image}
-				bio={communityDetails.bio}
-				type="Community"
-			/>
+		<>
+			<h1 className="head-text">Communities</h1>
 
-			<div className="mt-9">
-				<Tabs defaultValue="threads" className="w-full">
-					<TabsList className="tab">
-						{communityTabs.map((tab) => (
-							<TabsTrigger key={tab.label} value={tab.value} className="tab">
-								<Image
-									src={tab.icon}
-									alt={tab.label}
-									width={24}
-									height={24}
-									className="object-contain"
-								/>
-								<p className="max-sm:hidden">{tab.label}</p>
-
-								{tab.label === "Threads" && (
-									<p className="ml-1 rounded-sm bg-light-4 px-2 py-1 !text-tiny-medium text-light-2">
-										{communityDetails.threads.length}
-									</p>
-								)}
-							</TabsTrigger>
-						))}
-					</TabsList>
-
-					<TabsContent value="threads" className="w-full text-light-1">
-						<ThreadsTab
-							currentUserId={user.id}
-							accountId={communityDetails._id}
-							accountType="Community"
-						/>
-					</TabsContent>
-
-					<TabsContent value="members" className="mt-9 w-full text-light-1">
-						<section className="mt-9 flex flex-col gap-10">
-							{communityDetails.members.length === 0 ? (
-								<p>No members found.</p>
-							) : (
-								communityDetails.members.map((member: Member) => (
-									<UserCard
-										key={member.id}
-										id={member.id}
-										name={member.name}
-										username={member.username}
-										imgUrl={member.image}
-										personType="User"
-									/>
-								))
-							)}
-						</section>
-					</TabsContent>
-
-					<TabsContent value="requests" className="w-full text-light-1">
-						<ThreadsTab
-							currentUserId={user.id}
-							accountId={communityDetails._id}
-							accountType="Community"
-						/>
-					</TabsContent>
-				</Tabs>
+			<div className="mt-5">
+				<Searchbar routeType="communities" />
 			</div>
-		</section>
+
+			<section className="mt-9 flex flex-wrap gap-4">
+				{result.communities.length === 0 ? (
+					<p className="no-result">No Result</p>
+				) : (
+					<>
+						{result.communities.map((community) => (
+							<CommunityCard
+								key={community.id}
+								id={community.id}
+								name={community.name}
+								username={community.username}
+								imgUrl={community.image}
+								bio={community.bio}
+								members={community.members}
+							/>
+						))}
+					</>
+				)}
+			</section>
+
+			<Pagination
+				path="communities"
+				pageNumber={page ? +page : 1}
+				isNext={result.isNext}
+			/>
+		</>
 	);
 }
 
