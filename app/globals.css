@@ -316,7 +316,7 @@
 
 /* Tab */
 .tab {
-	@apply !flex !min-h-[50px] !flex-1 !items-center !gap-3;
+	@apply !flex !min-h-[50px] !flex-1 !items-center !gap-3 !w-full;
 	background-color: var(--color-dark-2);
 	color: var(--color-light-2);
 }
