@@ -76,6 +76,7 @@ export async function fetchUserPosts(userId: string) {
 		const threads = await User.findOne({ id: userId }).populate({
 			path: "threads",
 			model: Thread,
+			options: { sort: { createdAt: "desc" } },
 			populate: [
 				{
 					path: "community",

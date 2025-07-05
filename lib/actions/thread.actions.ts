@@ -41,11 +41,22 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 		parentId: { $in: [null, undefined] },
 	}); // Get the total count of posts
 
-	const posts = await postsQuery.exec();
+	const posts = await postsQuery.select("+likes").exec();
+
+	// Ensure likes is always an array of user ID strings for each post
+	const postsWithLikes = posts.map((post) => {
+		const obj = post.toObject ? post.toObject() : post;
+		return {
+			...obj,
+			likes: Array.isArray(obj.likes)
+				? obj.likes.map((like: any) => like.toString())
+				: [],
+		};
+	});
 
 	const isNext = totalPostsCount > skipAmount + posts.length;
 
-	return { posts, isNext };
+	return { posts: postsWithLikes, isNext };
 }
 
 interface Params {
@@ -73,6 +84,7 @@ export async function createThread({
 			text,
 			author,
 			community: communityIdObject, // Assign communityId if provided, or leave it null for personal account
+			likes: [], // Ensure likes is initialized as an empty array
 		});
 
 		// Update User model
@@ -173,7 +185,10 @@ export async function deleteThread(id: string, path: string): Promise<void> {
 	}
 }
 
-export async function fetchThreadById(threadId: string) {
+export async function fetchThreadById(
+	threadId: string,
+	currentUserId?: string
+) {
 	connectToDB();
 
 	try {
@@ -182,34 +197,50 @@ export async function fetchThreadById(threadId: string) {
 				path: "author",
 				model: User,
 				select: "_id id name image",
-			}) // Populate the author field with _id and username
+			})
 			.populate({
 				path: "community",
 				model: Community,
 				select: "_id id name image",
-			}) // Populate the community field with _id and name
+			})
 			.populate({
-				path: "children", // Populate the children field
+				path: "children",
 				populate: [
 					{
-						path: "author", // Populate the author field within children
+						path: "author",
 						model: User,
-						select: "_id id name parentId image", // Select only _id and username fields of the author
+						select: "_id id name parentId image",
 					},
 					{
-						path: "children", // Populate the children field within children
-						model: Thread, // The model of the nested children (assuming it's the same "Thread" model)
+						path: "children",
+						model: Thread,
 						populate: {
-							path: "author", // Populate the author field within nested children
+							path: "author",
 							model: User,
-							select: "_id id name parentId image", // Select only _id and username fields of the author
+							select: "_id id name parentId image",
 						},
 					},
 				],
 			})
+			.select("-__v")
 			.exec();
 
-		return thread;
+		if (!thread) return null;
+
+		const likes = Array.isArray(thread.likes)
+			? thread.likes.map((like: any) => like.toString())
+			: [];
+		const likesCount = likes.length;
+		const likedByCurrentUser = currentUserId
+			? likes.includes(currentUserId)
+			: false;
+
+		return {
+			...thread.toObject(),
+			likes,
+			likesCount,
+			likedByCurrentUser,
+		};
 	} catch (err) {
 		console.error("Error while fetching thread:", err);
 		throw new Error("Unable to fetch thread");
@@ -253,4 +284,14 @@ export async function addCommentToThread(
 		console.error("Error while adding comment:", err);
 		throw new Error("Unable to add comment");
 	}
+}
+
+export async function likeThread(threadId: string, userId: string) {
+	connectToDB();
+	await Thread.findByIdAndUpdate(threadId, { $addToSet: { likes: userId } });
+}
+
+export async function unlikeThread(threadId: string, userId: string) {
+	connectToDB();
+	await Thread.findByIdAndUpdate(threadId, { $pull: { likes: userId } });
 }

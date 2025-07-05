@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import { formatDateString } from "@/lib/utils";
 import DeleteThread from "../forms/DeleteThread";
+import ThreadShareButton from "./ThreadShareButton";
+import ThreadLikeButton from "./ThreadLikeButton";
 
 interface Props {
 	id: string;
@@ -25,6 +26,7 @@ interface Props {
 			image: string;
 		};
 	}[];
+	likes: string[];
 	isComment?: boolean;
 }
 
@@ -37,8 +39,11 @@ function ThreadCard({
 	community,
 	createdAt,
 	comments,
+	likes,
 	isComment,
 }: Props) {
+	console.log("Likes:", likes);
+
 	return (
 		<article
 			className={`flex w-full flex-col rounded-xl ${
@@ -61,21 +66,21 @@ function ThreadCard({
 
 					<div className="flex w-full flex-col">
 						<Link href={`/profile/${author.id}`} className="w-fit">
-							<h4 className="cursor-pointer text-base-semibold text-light-1">
+							<h4 className="cursor-pointer text-lg font-bold text-primary-500 leading-tight">
 								{author.name}
 							</h4>
 						</Link>
 
-						<p className="mt-2 text-small-regular text-light-2">{content}</p>
+						<p className="mt-2 text-base text-light-2 font-normal opacity-90">
+							{content}
+						</p>
 
 						<div className={`${isComment && "mb-10"} mt-5 flex flex-col gap-3`}>
 							<div className="flex gap-3.5">
-								<Image
-									src="/assets/heart-gray.svg"
-									alt="heart"
-									width={24}
-									height={24}
-									className="cursor-pointer object-contain"
+								<ThreadLikeButton
+									threadId={id.toString()}
+									currentUserId={currentUserId}
+									likes={likes}
 								/>
 								<Link href={`/thread/${id}`}>
 									<Image
@@ -83,23 +88,19 @@ function ThreadCard({
 										alt="heart"
 										width={24}
 										height={24}
+										title="Reply"
 										className="cursor-pointer object-contain"
 									/>
 								</Link>
 								<Image
 									src="/assets/repost.svg"
 									alt="heart"
+									title="Repost"
 									width={24}
 									height={24}
 									className="cursor-pointer object-contain"
 								/>
-								<Image
-									src="/assets/share.svg"
-									alt="heart"
-									width={24}
-									height={24}
-									className="cursor-pointer object-contain"
-								/>
+								<ThreadShareButton threadId={id.toString()} />
 							</div>
 
 							{isComment && comments.length > 0 && (
@@ -141,15 +142,12 @@ function ThreadCard({
 					</Link>
 				</div>
 			)}
-			{!isComment && community && (
-				<Link
-					href={`/communities/${community.id}`}
-					className="mt-5 flex items-center">
-					<p className="text-subtle-medium text-gray-1">
-						{formatDateString(createdAt)}
-						{community && ` - ${community.name} Community`}
-					</p>
-
+			<div className={`mt-1 flex items-center${isComment ? " mb-5" : ""}`}>
+				<p className="text-subtle-medium text-gray-1">
+					{formatDateString(createdAt)}
+					{community && ` - ${community.name} Community`}
+				</p>
+				{community && (
 					<Image
 						src={community.image}
 						alt={community.name}
@@ -157,8 +155,8 @@ function ThreadCard({
 						height={14}
 						className="ml-1 rounded-full object-cover"
 					/>
-				</Link>
-			)}
+				)}
+			</div>
 		</article>
 	);
 }

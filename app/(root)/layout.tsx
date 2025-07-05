@@ -5,6 +5,7 @@ import Topbar from "@/components/shared/Topbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 import { Inter } from "next/font/google";
 import "../globals.css";
 
@@ -36,7 +37,7 @@ export default function RootLayout({
 			appearance={{
 				baseTheme: dark,
 			}}>
-			<html lang="en">
+			<html lang="en" className="dark">
 				<body className={`${inter.className}`}>
 					<Topbar />
 
@@ -49,6 +50,7 @@ export default function RootLayout({
 					</main>
 
 					<Bottombar />
+					<Toaster theme="dark" />
 				</body>
 			</html>
 		</ClerkProvider>

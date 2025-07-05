@@ -23,6 +23,7 @@ interface Thread {
 	author: Author;
 	community: { id: string; name: string; image: string } | null;
 	createdAt: string;
+	likes: string[];
 	children: Thread[];
 }
 
@@ -51,6 +52,7 @@ async function page({
 					parentId={thread.parentId}
 					content={thread.text}
 					author={thread.author}
+					likes={thread.likes}
 					community={
 						thread.community as {
 							id: string;
@@ -80,6 +82,7 @@ async function page({
 						parentId={childItem.parentId}
 						content={childItem.text}
 						author={childItem.author}
+						likes={childItem.likes}
 						community={
 							childItem.community as {
 								id: string;
