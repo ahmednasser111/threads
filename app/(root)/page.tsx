@@ -24,6 +24,7 @@ interface Post {
 	parentId: string | null;
 	text: string;
 	likes: string[];
+	reposts: string[];
 	author: Author;
 	community: Community | null;
 	createdAt: string;
@@ -67,6 +68,7 @@ async function Home({
 								community={post.community}
 								createdAt={post.createdAt}
 								likes={post.likes}
+								reposts={post.reposts}
 								comments={post.children}
 							/>
 						))}

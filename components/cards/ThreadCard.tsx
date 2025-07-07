@@ -4,6 +4,7 @@ import { formatDateString } from "@/lib/utils";
 import DeleteThread from "../forms/DeleteThread";
 import ThreadShareButton from "./ThreadShareButton";
 import ThreadLikeButton from "./ThreadLikeButton";
+import ThreadRepostButton from "./ThreadRepostButton";
 
 interface Props {
 	id: string;
@@ -28,6 +29,7 @@ interface Props {
 	}[];
 	likes: string[];
 	isComment?: boolean;
+	reposts?: string[];
 }
 
 function ThreadCard({
@@ -41,9 +43,9 @@ function ThreadCard({
 	comments,
 	likes,
 	isComment,
+	reposts = [],
 }: Props) {
 	return (
-		// TODO: make all the component as link to the thread page
 		<article
 			className={`flex w-full flex-col rounded-xl ${
 				isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
@@ -84,20 +86,17 @@ function ThreadCard({
 								<Link href={`/thread/${id}`}>
 									<Image
 										src="/assets/reply.svg"
-										alt="heart"
+										alt="reply"
 										width={24}
 										height={24}
 										title="Reply"
 										className="cursor-pointer object-contain"
 									/>
 								</Link>
-								<Image
-									src="/assets/repost.svg"
-									alt="heart"
-									title="Repost"
-									width={24}
-									height={24}
-									className="cursor-pointer object-contain"
+								<ThreadRepostButton
+									threadId={id.toString()}
+									currentUserId={currentUserId}
+									reposts={reposts}
 								/>
 								<ThreadShareButton threadId={id.toString()} />
 							</div>

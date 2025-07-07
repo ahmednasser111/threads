@@ -41,22 +41,25 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 		parentId: { $in: [null, undefined] },
 	}); // Get the total count of posts
 
-	const posts = await postsQuery.select("+likes").exec();
+	const posts = await postsQuery.select("+likes +reposts").exec();
 
-	// Ensure likes is always an array of user ID strings for each post
-	const postsWithLikes = posts.map((post) => {
+	// Ensure likes and reposts are always arrays of user ID strings for each post
+	const postsWithLikesAndReposts = posts.map((post) => {
 		const obj = post.toObject ? post.toObject() : post;
 		return {
 			...obj,
 			likes: Array.isArray(obj.likes)
 				? obj.likes.map((like: string) => like.toString())
 				: [],
+			reposts: Array.isArray(obj.reposts)
+				? obj.reposts.map((repost: string) => repost.toString())
+				: [],
 		};
 	});
 
 	const isNext = totalPostsCount > skipAmount + posts.length;
 
-	return { posts: postsWithLikes, isNext };
+	return { posts: postsWithLikesAndReposts, isNext };
 }
 
 interface Params {
@@ -235,11 +238,22 @@ export async function fetchThreadById(
 			? likes.includes(currentUserId)
 			: false;
 
+		const reposts = Array.isArray(thread.reposts)
+			? thread.reposts.map((repost: string) => repost.toString())
+			: [];
+		const repostsCount = reposts.length;
+		const repostedByCurrentUser = currentUserId
+			? reposts.includes(currentUserId)
+			: false;
+
 		return {
 			...thread.toObject(),
 			likes,
 			likesCount,
 			likedByCurrentUser,
+			reposts,
+			repostsCount,
+			repostedByCurrentUser,
 		};
 	} catch (err) {
 		console.error("Error while fetching thread:", err);
@@ -304,6 +318,28 @@ export async function fetchThreadLikes(threadId: string) {
 	if (!thread || !Array.isArray(thread.likes)) return [];
 	// Find users by their IDs in the likes array
 	return await User.find({ id: { $in: thread.likes } }).select(
+		"id name username image"
+	);
+}
+
+export async function repostThread(threadId: string, userId: string) {
+	connectToDB();
+	await Thread.findByIdAndUpdate(threadId, { $addToSet: { reposts: userId } });
+}
+
+export async function unrepostThread(threadId: string, userId: string) {
+	connectToDB();
+	await Thread.findByIdAndUpdate(threadId, { $pull: { reposts: userId } });
+}
+
+export async function fetchThreadReposts(threadId: string) {
+	await connectToDB();
+	const thread = (await Thread.findById(threadId).select("reposts").lean()) as {
+		reposts?: string[];
+	} | null;
+	if (!thread || !Array.isArray(thread.reposts)) return [];
+	// Find users by their IDs in the reposts array
+	return await User.find({ id: { $in: thread.reposts } }).select(
 		"id name username image"
 	);
 }
