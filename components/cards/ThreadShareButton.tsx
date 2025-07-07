@@ -23,6 +23,7 @@ const ThreadShareButton = ({ threadId }: ThreadShareButtonProps) => {
 			toast("Copy failed", {
 				description: "Failed to copy link.",
 			});
+			console.log("Failed to copy link:", err);
 		}
 	};
 
