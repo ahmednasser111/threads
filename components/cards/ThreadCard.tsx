@@ -42,9 +42,8 @@ function ThreadCard({
 	likes,
 	isComment,
 }: Props) {
-	console.log("Likes:", likes);
-
 	return (
+		// TODO: make all the component as link to the thread page
 		<article
 			className={`flex w-full flex-col rounded-xl ${
 				isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"

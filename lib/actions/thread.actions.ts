@@ -295,3 +295,15 @@ export async function unlikeThread(threadId: string, userId: string) {
 	connectToDB();
 	await Thread.findByIdAndUpdate(threadId, { $pull: { likes: userId } });
 }
+
+export async function fetchThreadLikes(threadId: string) {
+	await connectToDB();
+	const thread = (await Thread.findById(threadId).select("likes").lean()) as {
+		likes?: string[];
+	} | null;
+	if (!thread || !Array.isArray(thread.likes)) return [];
+	// Find users by their IDs in the likes array
+	return await User.find({ id: { $in: thread.likes } }).select(
+		"id name username image"
+	);
+}
