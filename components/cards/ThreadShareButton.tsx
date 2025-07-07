@@ -19,7 +19,7 @@ const ThreadShareButton = ({ threadId }: ThreadShareButtonProps) => {
 			toast("Link copied!", {
 				description: "Thread link has been copied to your clipboard.",
 			});
-		} catch (err) {
+		} catch (err: unknown) {
 			toast("Copy failed", {
 				description: "Failed to copy link.",
 			});

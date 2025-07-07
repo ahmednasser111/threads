@@ -7,7 +7,6 @@ import Comment from "@/components/forms/Comment";
 
 import { fetchUser } from "@/lib/actions/user.actions";
 import { fetchThreadById } from "@/lib/actions/thread.actions";
-import Link from "next/link";
 
 export const revalidate = 0;
 

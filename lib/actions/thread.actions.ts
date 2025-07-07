@@ -49,7 +49,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 		return {
 			...obj,
 			likes: Array.isArray(obj.likes)
-				? obj.likes.map((like: any) => like.toString())
+				? obj.likes.map((like: string) => like.toString())
 				: [],
 		};
 	});
@@ -228,7 +228,7 @@ export async function fetchThreadById(
 		if (!thread) return null;
 
 		const likes = Array.isArray(thread.likes)
-			? thread.likes.map((like: any) => like.toString())
+			? thread.likes.map((like: string) => like.toString())
 			: [];
 		const likesCount = likes.length;
 		const likedByCurrentUser = currentUserId

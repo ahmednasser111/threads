@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { deleteThread } from "@/lib/actions/thread.actions";
@@ -30,7 +30,7 @@ function DeleteThread({ threadId, currentUserId, authorId }: Props) {
 		<>
 			<Image
 				src="/assets/delete.svg"
-				alt="delte"
+				alt="delete"
 				width={18}
 				height={18}
 				className="cursor-pointer object-contain"
