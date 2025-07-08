@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { deleteThread } from "@/lib/actions/thread.actions";
@@ -17,11 +17,17 @@ interface Props {
 
 function DeleteThread({ threadId, currentUserId, authorId }: Props) {
 	const pathname = usePathname();
+	const router = useRouter();
 	const [showConfirm, setShowConfirm] = useState(false);
 
 	const handleConfirm = async () => {
 		await deleteThread(JSON.parse(threadId), pathname);
 		setShowConfirm(false);
+
+		// Route to home if we're on a thread page
+		if (pathname.includes("/thread/")) {
+			router.push("/");
+		}
 	};
 
 	if (currentUserId !== authorId || pathname === "/") return null;

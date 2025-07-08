@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { repostThread, unrepostThread } from "@/lib/actions/thread.actions";
+import { repostThread } from "@/lib/actions/thread.actions";
 
 interface Props {
 	threadId: string;
@@ -17,11 +17,7 @@ function ThreadRepostButton({ threadId, currentUserId, reposts }: Props) {
 	const [repostCount, setRepostCount] = useState<number>(reposts.length);
 
 	const handleRepostClick = async () => {
-		if (isReposted) {
-			await unrepostThread(threadId, currentUserId);
-			setIsReposted(false);
-			setRepostCount((prev) => prev - 1);
-		} else {
+		if (!isReposted) {
 			await repostThread(threadId, currentUserId);
 			setIsReposted(true);
 			setRepostCount((prev) => prev + 1);
@@ -35,8 +31,10 @@ function ThreadRepostButton({ threadId, currentUserId, reposts }: Props) {
 				alt="repost"
 				width={24}
 				height={24}
-				title={isReposted ? "Unrepost" : "Repost"}
-				className="cursor-pointer object-contain"
+				title={isReposted ? "Already reposted" : "Repost"}
+				className={`cursor-pointer object-contain ${
+					isReposted ? "opacity-50" : ""
+				}`}
 				onClick={handleRepostClick}
 			/>
 			{repostCount > 0 && (
