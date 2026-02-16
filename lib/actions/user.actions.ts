@@ -192,3 +192,37 @@ export async function getActivity(userId: string) {
 		throw error;
 	}
 }
+
+export async function fetchUserReposts(userId: string) {
+	try {
+		connectToDB();
+
+		// Find all threads where this user is in the reposts array
+		const repostedThreads = await Thread.find({ reposts: userId })
+			.populate({
+				path: "author",
+				model: User,
+				select: "_id id name image",
+			})
+			.populate({
+				path: "community",
+				select: "_id id name image",
+			})
+			.populate({
+				path: "children",
+				populate: {
+					path: "author",
+					model: User,
+					select: "_id id name parentId image",
+				},
+			})
+			.sort({ createdAt: "desc" });
+
+		return {
+			threads: repostedThreads,
+		};
+	} catch (error) {
+		console.error("Error fetching user reposts:", error);
+		throw error;
+	}
+}

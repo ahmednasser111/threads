@@ -8,6 +8,7 @@ import { fetchUser } from "@/lib/actions/user.actions";
 import { ProfileHeader } from "@/components/shared/ProfileHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ThreadsTab from "@/components/shared/ThreadsTab";
+import RepostsTab from "@/components/shared/RepostsTab";
 
 async function Page({
 	params: paramsPromise,
@@ -61,7 +62,7 @@ async function Page({
 							key={`content-${tab.label}`}
 							value={tab.value}
 							className="w-full text-light-1">
-							<ThreadsTab
+							<RepostsTab
 								currentUserId={user.id}
 								accountId={userInfo.id}
 								accountType="User"

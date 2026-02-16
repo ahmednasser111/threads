@@ -27,14 +27,11 @@ function ThreadRepostButton({ threadId, currentUserId, reposts }: Props) {
 	return (
 		<div className="flex gap-1 items-center">
 			<Image
-				src="/assets/repost.svg"
+				src={isReposted ? "/assets/repost-filled.svg" : "/assets/repost.svg"}
 				alt="repost"
 				width={24}
 				height={24}
 				title={isReposted ? "Already reposted" : "Repost"}
-				className={`cursor-pointer object-contain ${
-					isReposted ? "opacity-50" : ""
-				}`}
 				onClick={handleRepostClick}
 			/>
 			{repostCount > 0 && (
