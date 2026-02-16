@@ -7,7 +7,6 @@ import { profileTabs } from "@/constants";
 import { fetchUser } from "@/lib/actions/user.actions";
 import { ProfileHeader } from "@/components/shared/ProfileHeader";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import ThreadsTab from "@/components/shared/ThreadsTab";
 import RepostsTab from "@/components/shared/RepostsTab";
 
 async function Page({
