@@ -34,6 +34,10 @@ const nextConfig: NextConfig = {
 				protocol: "https",
 				hostname: "upload.wikimedia.org",
 			},
+			{
+				protocol: "https",
+				hostname: "media2.dev.to",
+			}
 		],
 	},
 };
